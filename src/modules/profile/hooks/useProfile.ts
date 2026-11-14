@@ -24,6 +24,9 @@ export const useDeleteAccount = () => {
   });
 };
 
+export const useEmailBackup = () =>
+  useMutation({ mutationFn: () => profileApi.emailBackup() });
+
 export const useChangePassword = () =>
   useMutation({
     mutationFn: (payload: { currentPassword: string; newPassword: string }) =>

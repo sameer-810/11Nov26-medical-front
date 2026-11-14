@@ -10,12 +10,15 @@ import {
   Building2,
   Monitor,
   Trash2,
+  DatabaseBackup,
 } from "lucide-react-native";
 import { useAuthStore } from "@shared/store/useAuthStore";
+import { PERMISSIONS } from "@shared/permissions";
 import {
   useUpdateProfile,
   useChangePassword,
   useDeleteAccount,
+  useEmailBackup,
 } from "@modules/profile/hooks/useProfile";
 import { useSessions, useLogoutAll } from "@modules/profile/hooks/useSessions";
 import {
@@ -56,6 +59,11 @@ export default function ProfileScreen() {
   } = useSessions();
   const logoutAll = useLogoutAll();
   const deleteMut = useDeleteAccount();
+  // Admin-only: the backup email carries the pharmacy's complete dataset.
+  const canBackup = useAuthStore((s) => s.hasPermission)(
+    PERMISSIONS.SETTINGS_MANAGE,
+  );
+  const backupMut = useEmailBackup();
   const [deletePassword, setDeletePassword] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
   const isAdmin = user?.role === "admin";
@@ -316,6 +324,52 @@ export default function ProfileScreen() {
           )}
         </VStack>
       </Card>
+
+      {canBackup && (
+        <>
+          <Text
+            variant="h3"
+            tone="primary"
+            style={{ marginTop: 8, marginBottom: 12 }}
+          >
+            Data backup
+          </Text>
+          <Card style={{ marginBottom: 24 }}>
+            <VStack gap={12}>
+              <Text variant="body-sm" tone="secondary">
+                Emails a zip with all your data — products, stock, sales,
+                purchases, customers and suppliers — as a spreadsheet plus
+                restore files. It goes to the backup address set on the server,
+                or to your login email. A copy is also made automatically every
+                night.
+              </Text>
+              {backupMut.isError && (
+                <Text variant="caption" tone="danger">
+                  {apiErrorMessage(backupMut.error)}
+                </Text>
+              )}
+              {backupMut.isSuccess && (
+                <Text variant="caption" tone="success">
+                  {backupMut.data?.message || "Backup sent."}
+                </Text>
+              )}
+              <Button
+                label="Email my backup"
+                variant="secondary"
+                icon={
+                  <DatabaseBackup
+                    size={18}
+                    color={palette.text.primary}
+                    strokeWidth={2}
+                  />
+                }
+                loading={backupMut.isPending}
+                onPress={() => backupMut.mutate()}
+              />
+            </VStack>
+          </Card>
+        </>
+      )}
 
       <Button
         label="Sign out"

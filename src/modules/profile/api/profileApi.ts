@@ -26,6 +26,19 @@ export const profileApi = {
     const res = await apiClient.post("/users/me/change-password", payload);
     return res.data;
   },
+  /**
+   * Builds a full backup of the pharmacy's data server-side and emails it to
+   * SHOP_BACKUP_EMAIL (backend .env) or the admin's own address. Slow by
+   * nature (the server zips the whole dataset), hence the long timeout.
+   */
+  emailBackup: async () => {
+    const res = await apiClient.post<{
+      success: boolean;
+      message: string;
+      data: { emailedTo: string; fileName: string; sizeBytes: number };
+    }>("/backup/email", undefined, { timeout: 180_000 });
+    return res.data;
+  },
   deleteAccount: async (password: string) => {
     const res = await apiClient.delete<{
       success: boolean;
