@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Bombay Medical",
-    "slug": "inventory-saas",
+    "slug": "bombay-medical",
     "version": "1.0.0",
     "runtimeVersion": {
       "policy": "appVersion"
@@ -9,9 +9,9 @@
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "medstock",
+    "scheme": "bombaymedical",
     "ios": {
-      "bundleIdentifier": "com.plusveda.app",
+      "bundleIdentifier": "com.bombaymedical.app",
       "supportsTablet": true,
       "infoPlist": {
         "NSCameraUsageDescription": "Bombay Medical uses the camera to scan barcodes and read the batch number on medicine packs, and to photograph supplier bills and cheques, for example to add a strip of paracetamol to a sale in one scan.",
@@ -27,7 +27,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F8F0D8"
       },
-      "package": "com.medstock.app",
+      "package": "com.bombaymedical.app",
       "softwareKeyboardLayoutMode": "resize",
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO",
@@ -89,14 +89,14 @@
       "./plugins/withReleaseSigning",
       "./plugins/withAndroidBuildTuning"
     ],
+    "updates": {
+      "url": "https://u.expo.dev/00151171-4538-4e00-a031-32c89a95e14a"
+    },
     "extra": {
       "eas": {
-        "projectId": "4320ec62-c3c0-46ba-b623-a873d5f59903"
+        "projectId": "00151171-4538-4e00-a031-32c89a95e14a"
       }
     },
-    "owner": "fdami2",
-    "updates": {
-      "url": "https://u.expo.dev/4320ec62-c3c0-46ba-b623-a873d5f59903"
-    }
+    "owner": "akbarsacademy98"
   }
 }

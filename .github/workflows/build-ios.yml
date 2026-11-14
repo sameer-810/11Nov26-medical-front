@@ -10,11 +10,11 @@ name: Build iOS (.ipa)
 # quota — budget roughly 4-6 builds/month on the free plan. On a PUBLIC repo,
 # standard macOS runners are free.
 #
-# PREREQUISITE (one time, cannot be done from CI): logged in to Expo as
-# `fdami2`, run
+# PREREQUISITE (one time, cannot be done from CI): logged in to Expo as the
+# project owner (`akbarsacademy98`), run
 #   npx eas-cli build --platform ios --profile production
-# once from your Mac and answer the Apple login (5fivempvt@gmail.com) + SMS
-# 2FA prompts. That generates
+# once and answer the Apple Developer login (the paid Bombay Medical Apple
+# account) + SMS 2FA prompts. That generates
 # the distribution certificate and provisioning profile and stores them on the
 # EAS servers. This workflow then fetches them non-interactively via EXPO_TOKEN.
 # Without that step, the build here fails with a credentials error.

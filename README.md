@@ -53,19 +53,32 @@ variables before building. After the first deploy, set the backend's
 `11Nov26-medical-web` is the old Plusveda marketing page. It is not part of
 the app and has not been rebranded.
 
-## Android build (EAS)
+## App builds (EAS)
+
+The EAS project is `@akbarsacademy98/bombay-medical` (`owner` /
+`extra.eas.projectId` in `app.json`); building from another Expo account is
+refused with "Entity Not Authorized". The Android signing keystore is stored on
+EAS, not in this repo. App id on both stores: `com.bombaymedical.app`
+(permanent once published).
 
 ```bash
-npx eas-cli login
+npx eas-cli login                                   # or set EXPO_TOKEN
 npx eas-cli build -p android --profile preview      # installable APK
-npx eas-cli build -p android --profile production   # Play Store bundle
+npx eas-cli build -p android --profile production   # Play Store .aab
+npx eas-cli build -p ios --profile preview          # ad-hoc .ipa (see below)
+npx eas-cli build:list                              # status + download links
 ```
 
-`eas.json` already points both profiles at the Render API. Before the first
-Play Store upload, decide the package name (`android.package` in `app.json` is
-still `com.medstock.app`; the iOS bundle id is `com.plusveda.app`) and the Expo
-account that owns the project (`extra.eas.projectId` / `owner` in `app.json`).
-The package name cannot change once an app is on the Play Store.
+`eas.json` points every profile at the Render API. On Windows only cloud
+builds work (`eas build --local` needs macOS/Linux); the GitHub workflows in
+`.github/workflows/` run local builds for free once the repo has an
+`EXPO_TOKEN` secret.
+
+iOS needs a paid Apple Developer account (US$99/year). The first `eas build
+-p ios` must run interactively so EAS can sign in to that account and create
+the certificate and provisioning profile; after that, CI builds work with the
+token alone. A preview `.ipa` installs only on iPhones registered with
+`eas device:create`; a production `.ipa` goes through TestFlight/App Store.
 
 ## Brand assets
 
@@ -78,8 +91,8 @@ npm i sharp --no-save && node scripts/genIcons.mjs
 
 Deliberately kept from the old brand (changing them would sign everyone out,
 lose drafts or break the desktop shell): local storage keys (`medstock-*`,
-`plusveda.*`), the service-worker cache names, the `medstock` deep-link scheme
-and the `window.medstock` desktop bridge.
+`plusveda.*`), the service-worker cache names and the `window.medstock`
+desktop bridge. The deep-link scheme is `bombaymedical://`.
 
 ## Bill-photo scanning
 
