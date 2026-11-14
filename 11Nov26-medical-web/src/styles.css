@@ -1,0 +1,2067 @@
+/**
+ * Plusveda landing — styles. Art direction: "the counter ledger".
+ *
+ * A pharmacy runs on paperwork, so the page is built like a register rather
+ * than a template:
+ *
+ *   - Hairline rules instead of card shadows.
+ *   - Tabular mono numerals (IBM Plex Mono) for every figure and label.
+ *   - 3px corners. A tool has sharp corners; a template has 16px ones.
+ *   - Left-aligned, asymmetric columns. Centred everything is the giveaway.
+ *   - One flat green, no gradients (the hero band excepted).
+ *
+ * Tokens are copied from the app's designSystem.ts rather than imported, so
+ * this site never depends on the Expo bundle. Change the brand green in both.
+ */
+
+:root {
+  /* Brand — 600 is the exact logo green, sampled from the wordmark. */
+  --brand-900: #073c21;
+  --brand-800: #0a5730;
+  --brand-700: #0c7942;
+  --brand-600: #10a058;
+  --brand-300: #76dba5;
+  --brand-100: #d6f5e7;
+  --brand-50: #eefbf5;
+
+  --ink-900: #17242d;
+  --ink-800: #1e2c36;
+  --ink-700: #334049;
+  --ink-200: #e1e7eb;
+  --ink-100: #eff3f5;
+  --ink-50: #f6f9fb;
+
+  --text-primary: #17242d;
+  --text-secondary: #425059;
+  --text-tertiary: #667079;
+
+  --surface: #ffffff;
+  --surface-sunken: #f3f6f8;
+  --rule: #e4eaee;
+  --rule-strong: #c6cfd5;
+
+  --danger-text: #b32d1d;
+
+  /* Sharp. A pharmacy tool, not a template. */
+  --radius: 3px;
+  --radius-lg: 5px;
+
+  --page: 1180px;
+
+  /* Outfit on headings: the reference site the owner asked this page to match
+     is set entirely in it, and the face is most of why their page reads the
+     way it does. Body copy stays Inter, which is what the product itself
+     uses — Outfit is a display face and gets tiring at 16px over a paragraph. */
+  --font-head: "Outfit", "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-head);
+  line-height: 1.14;
+  letter-spacing: -0.021em;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* `display: block` above beats the user-agent rule that makes [hidden] work,
+   so the showcase rendered all four of its panels stacked on top of each
+   other. Any element-level display value does this — it is not specific to
+   images, so the reset is written for both. */
+[hidden] {
+  display: none !important;
+}
+
+/* Inline padding only, never the shorthand. `.wrap` is co-classed onto elements
+   that set their own vertical padding (.hero-grid), and a `padding: 0 20px` in
+   a later breakpoint silently reset those to zero — which jammed the phone
+   headline up against the nav. */
+.wrap {
+  width: 100%;
+  max-width: var(--page);
+  margin: 0 auto;
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+/* The page's one recurring device: a mono label, upper-case, tracked out, with
+   a rule running off to its left. It reads as a column heading in a register. */
+.label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brand-700);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: var(--brand-600);
+  flex: none;
+}
+
+/* ---- Buttons ------------------------------------------------------------
+   Square-ish, weighty, no pill. The primary is a solid block of the brand
+   green; the secondary is a rule and nothing else. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  padding: 15px 24px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.14s ease,
+    border-color 0.14s ease,
+    color 0.14s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--brand-600);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--brand-700);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--rule-strong);
+}
+
+.btn-ghost:hover {
+  border-color: var(--brand-600);
+  color: var(--brand-700);
+}
+
+.btn-sm {
+  padding: 11px 17px;
+  font-size: 14px;
+}
+
+/* ---- Nav ---------------------------------------------------------------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  height: 72px;
+}
+
+.brand img {
+  /* Tall enough that the tagline under the wordmark stays legible. */
+  height: 42px;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  margin-left: auto;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.nav-links a,
+.nav-signin {
+  white-space: nowrap;
+}
+
+.nav-links a {
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+}
+
+.nav-links a:hover {
+  color: var(--brand-700);
+  border-bottom-color: var(--brand-600);
+}
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-signin {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.nav-signin:hover {
+  color: var(--brand-700);
+}
+
+/* ---- Hero ---------------------------------------------------------------
+   Asymmetric and left-aligned, with the screenshot running off the right edge
+   of the page. Bleeding it deliberately does two jobs: it stops the hero
+   reading as a centred template, and it lets the app render at a scale where
+   its own text is legible instead of a grey smear. */
+
+.hero {
+  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+  /* A deep brand band, not a white page with a picture on it. The reference
+     site the owner sent leads with a saturated teal hero and it is the reason
+     that page reads as confident at a glance; a white hero with a pale
+     illustration beside it reads as a document. */
+  background: linear-gradient(135deg, #0b6f45 0%, #0f8a63 45%, #12798f 100%);
+  color: #ffffff;
+}
+
+.hero .label {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.hero .hero-sub {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.hero .hero-note {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.hero .label::before {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.hero h1 {
+  color: #ffffff;
+}
+
+/* On the dark band the brand green vanishes into the background — the emphasis
+   has to come from a pale tint. `span.accent` outranks the base `.hero h1
+   .accent` rule further down the file. */
+.hero h1 span.accent {
+  color: #c9f7e2;
+}
+
+/* Primary CTA inverts on the band — white pill, brand text — so it stays the
+   loudest thing on the hero. */
+.hero .btn-primary {
+  background: #ffffff;
+  color: var(--brand-800);
+  border-color: #ffffff;
+}
+
+.hero .btn-ghost {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.45);
+  background: transparent;
+}
+
+.hero .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 47%) minmax(0, 53%);
+  gap: 52px;
+  /* Both columns start at the same line. Centring the copy against a tall
+     screenshot left a third of the hero as blank white under the nav. */
+  align-items: start;
+  padding: 66px 0 0;
+}
+
+/* The reference sets its headline at 48px / weight 500 / -1.2px tracking /
+   1.0 leading. Copied: the light weight at a large size is most of why that
+   page reads as calm rather than shouted, and a 700-weight headline in Outfit
+   at this size is noticeably heavier than the one being matched. */
+.hero h1 {
+  font-size: clamp(34px, 4.1vw, 50px);
+  font-weight: 500;
+  letter-spacing: -0.026em;
+  line-height: 1.06;
+  margin-top: 22px;
+}
+
+.hero h1 .accent {
+  color: var(--brand-600);
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-top: 20px;
+  max-width: 46ch;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.hero-note {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+  color: var(--text-tertiary);
+}
+
+/* ---- Ledger strip -------------------------------------------------------
+   Four figures ruled apart like columns in a register, not four stat cards. */
+
+.ledger {
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface);
+}
+
+.ledger-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.ledger-cell {
+  padding: 30px 30px 30px 0;
+  border-left: 1px solid var(--rule);
+  padding-left: 26px;
+}
+
+.ledger-cell:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.ledger-cell strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--brand-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger-cell span {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 30ch;
+}
+
+/* ---- Sections ----------------------------------------------------------- */
+
+.section {
+  padding: 92px 0;
+}
+
+.section-sunken {
+  background: var(--ink-50);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Left-aligned, two-part heading: the title on the left, the standfirst in a
+   column beside it. Nothing is centred. */
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+  gap: 56px;
+  align-items: end;
+  padding-bottom: 44px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 46px;
+}
+
+.section-head h2 {
+  font-size: clamp(28px, 3.2vw, 39px);
+  font-weight: 700;
+  margin-top: 18px;
+}
+
+.section-head > div > p {
+  font-size: 17px;
+  color: var(--text-secondary);
+}
+
+/* ---- The honest note ----------------------------------------------------
+   Set as a letter, because that is what it is. */
+
+.letter {
+  display: grid;
+  grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.letter h2 {
+  font-size: clamp(25px, 2.7vw, 33px);
+  font-weight: 700;
+  margin-top: 18px;
+}
+
+.letter p {
+  font-size: 17px;
+  color: var(--text-secondary);
+}
+
+.letter p + p {
+  margin-top: 18px;
+}
+
+.letter .sign {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+/* ---- FAQ ----------------------------------------------------------------- */
+
+.faq {
+  border-top: 1px solid var(--rule);
+}
+
+.faq details {
+  border-bottom: 1px solid var(--rule);
+  padding: 22px 0;
+}
+
+.faq summary {
+  cursor: pointer;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.015em;
+  list-style: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 24px;
+  gap: 20px;
+  align-items: center;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--brand-600);
+  text-align: right;
+}
+
+.faq details[open] summary::after {
+  content: "–";
+}
+
+.faq details p {
+  margin-top: 14px;
+  font-size: 15.5px;
+  color: var(--text-secondary);
+  max-width: 82ch;
+}
+
+/* ---- Closing CTA --------------------------------------------------------
+   A flat green block. No gradient — the gradient was one of the tells. */
+
+.close-cta {
+  background: var(--brand-800);
+  color: #fff;
+  padding: 84px 0;
+}
+
+.close-cta-grid {
+  display: grid;
+  /* Fixed, not auto: sized to content the mono footnote stretched the buttons
+     to 450px, which reads as a form field rather than a call to action. */
+  grid-template-columns: minmax(0, 1fr) 296px;
+  gap: 56px;
+  align-items: center;
+}
+
+.close-cta h2 {
+  font-size: clamp(28px, 3.4vw, 40px);
+  font-weight: 700;
+  max-width: 17ch;
+}
+
+.close-cta p {
+  margin-top: 18px;
+  max-width: 48ch;
+  font-size: 17px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.close-cta .label {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.close-cta .label::before {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.close-cta .btn-primary {
+  background: #fff;
+  color: var(--brand-800);
+}
+
+.close-cta .btn-primary:hover {
+  background: var(--brand-50);
+}
+
+.close-cta .btn-ghost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.close-cta .btn-ghost:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.close-cta .hero-cta {
+  margin-top: 0;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.close-cta .hero-note {
+  color: rgba(255, 255, 255, 0.62);
+  margin-top: 14px;
+}
+
+/* ---- Footer -------------------------------------------------------------
+   Light, not the default dark slab — and the real wordmark, which is drawn on
+   white and would sit in a grey box on a dark ground. */
+
+.footer {
+  padding: 56px 0 40px;
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--rule);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 64px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.footer .brand img {
+  height: 50px;
+}
+
+.footer-blurb {
+  margin-top: 16px;
+  max-width: 40ch;
+  color: var(--text-tertiary);
+}
+
+.footer-cols {
+  display: flex;
+  gap: 72px;
+  flex-wrap: wrap;
+}
+
+.footer-col h4 {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: 0 0 16px;
+}
+
+.footer-col a {
+  display: block;
+  text-decoration: none;
+  margin-bottom: 11px;
+  color: var(--text-secondary);
+}
+
+.footer-col a:hover {
+  color: var(--brand-700);
+}
+
+/* ---- Side by side -------------------------------------------------------
+   A ruled three-column register, not a pair of pricing-style cards. The job is
+   the row label; the two answers sit beside each other so the difference is
+   read across rather than hunted for between two columns of prose. */
+
+.compare {
+  margin-top: 40px;
+  border-top: 1px solid var(--rule-strong);
+}
+
+.compare-head,
+.compare-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.compare-head {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: 11px 0;
+}
+
+.compare-head .is-ours {
+  color: var(--brand-700);
+  font-weight: 600;
+}
+
+.compare-q {
+  font-weight: 600;
+  font-size: 15.5px;
+}
+
+.compare-usual {
+  color: var(--text-tertiary);
+  font-size: 15px;
+}
+
+/* The only coloured text in the table, and it marks the column that is the
+   point of the table. */
+.compare-ours {
+  color: var(--brand-700);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+@media (max-width: 1080px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 60px;
+  }
+
+  .preview {
+    width: 100%;
+    border-right: 1px solid var(--rule);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .preview-hint {
+    padding-right: 0;
+  }
+
+  .hero-sub {
+    max-width: 60ch;
+  }
+
+  /* Six links plus the CTA only just fit between 960 and 1080px. */
+  .nav-links {
+    gap: 18px;
+    font-size: 14.5px;
+  }
+}
+
+@media (max-width: 960px) {
+  .ledger-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ledger-cell:nth-child(3) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .ledger-cell:nth-child(3),
+  .ledger-cell:nth-child(4) {
+    border-top: 1px solid var(--rule);
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .close-cta .hero-cta {
+    flex-direction: row;
+  }
+}
+
+/* ---- Sticky action bar (phones) ----------------------------------------- */
+
+.sticky-bar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .sticky-bar {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(255, 255, 255, 0.97);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--rule);
+    transform: translateY(110%);
+    transition: transform 0.22s ease;
+  }
+
+  .sticky-bar.is-up {
+    transform: translateY(0);
+  }
+
+  .sticky-bar .btn {
+    padding: 13px 18px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-bar {
+      transition: none;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* Section rhythm is generous on a desktop because there is room to be.
+     On a phone that same air is pure scrolling between the reader and the
+     button, so it comes down. */
+  .section {
+    padding: 38px 0;
+  }
+
+  .section-head {
+    padding-bottom: 26px;
+    margin-bottom: 28px;
+  }
+
+  .section-head h2 {
+    margin-top: 12px;
+  }
+
+  .loss {
+    padding: 24px 0;
+  }
+
+  /* ---- Mobile-first hero ------------------------------------------------
+     Four visitors in five are on a phone, and the one thing that has to be on
+     the first screen is the software. Everything here buys vertical space back
+     for it: a tighter headline, a smaller gap, and the fine print demoted
+     below the product where it belongs. */
+  /* gap:0 because `display: contents` below promotes each piece of the hero to
+     its own grid row — the grid gap then stacked on top of every element's own
+     margin and put a hole between the headline and the sentence under it. */
+  .hero-grid {
+    padding-top: 30px;
+    gap: 0;
+  }
+
+  .hero-fig {
+    margin-top: 18px;
+    padding-bottom: 8px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+    margin-top: 14px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    margin-top: 14px;
+  }
+
+  .hero-cta {
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  /* Below the product, not above it — nobody decides on the strength of
+     "no card needed" before they have seen the thing. */
+  .hero-note {
+    order: 3;
+    margin-top: 16px;
+  }
+
+  .hero-fig {
+    order: 2;
+  }
+
+  .hero > .wrap > div:first-child {
+    display: contents;
+  }
+
+  /* Two up, not four stacked. Four full-width rows spent ~600px of phone on
+     four short facts; a 2×2 says the same in half the height. */
+  .ledger-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 18px;
+  }
+
+  .ledger-cell {
+    border-left: 0;
+    padding: 18px 0;
+  }
+
+  .ledger-cell:nth-child(n + 3) {
+    border-top: 1px solid var(--rule);
+  }
+
+  .ledger-cell strong {
+    font-size: 17px;
+  }
+
+  .ledger-cell span {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  /* Steps read as a short numbered list on a phone, not three stacked panels. */
+  .steps {
+    gap: 0;
+  }
+
+  .step {
+    border-top: 1px solid var(--rule);
+    padding: 18px 0 0;
+  }
+
+  .step:first-child {
+    border-top: 2px solid var(--brand-600);
+  }
+
+  .step h3 {
+    margin-top: 8px;
+    font-size: 17px;
+  }
+
+  .step p {
+    margin-top: 7px;
+    font-size: 14.5px;
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+  }
+
+  .nav-signin {
+    display: none;
+  }
+
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .footer-cols {
+    gap: 40px;
+  }
+
+  /* A 168px sidebar inside a 350px frame leaves no room for the screen it is
+     meant to be showing. On a phone the nav becomes a scrolling strip of tabs
+     above the screen — which is roughly what the app itself does, since its
+     sidebar is a drawer at this width. */
+  .preview-body {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-nav {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    padding: 6px 8px;
+    scrollbar-width: none;
+  }
+
+  .preview-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .preview-section {
+    display: none;
+  }
+
+  .preview-item {
+    width: auto;
+    white-space: nowrap;
+    border-left: 0;
+    border-bottom: 2px solid transparent;
+    padding: 7px 11px;
+  }
+
+  .preview-item.is-active {
+    border-left: 0;
+    border-bottom-color: var(--brand-600);
+  }
+
+  /* No crop on a phone — deliberately.
+     This was clipped to 410px to save scrolling, which meant a phone visitor
+     saw the top third of a screen and nothing it added up to. But the phone IS
+     the main way this product gets looked at, and a whole phone screen shown
+     on a phone is the most honest demonstration available: this is exactly
+     what you will be holding. The extra ~320px buys that. */
+  .preview-screen img {
+    max-height: none;
+  }
+
+  /* Clear the sticky bar so it never sits on top of the footer's last line. */
+  .footer {
+    padding-bottom: calc(78px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Was nested inside the reduced-motion query above — a merge slip, so the hero
+   figure's spacing only applied to visitors who ask for reduced motion. */
+.hero-fig {
+  padding: 0 0 28px;
+}
+
+@media (max-width: 640px) {
+  .compare-head {
+    display: none;
+  }
+  .compare-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 14px 0;
+  }
+  /* Without the header row the two answers need naming in place, or they are
+     just two unlabelled lines. */
+  .compare-usual::before {
+    content: "Usually — ";
+    color: var(--text-tertiary);
+  }
+  .compare-ours::before {
+    content: "Plusveda — ";
+    color: var(--brand-700);
+  }
+}
+
+/* ---- Wave dividers ------------------------------------------------------
+   Layered curves between bands instead of a straight edge. `display:block` on
+   the svg kills the inline-element descender gap that otherwise shows as a
+   hairline of the wrong colour under the wave. */
+
+.wave {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+  /* Sits over the band above so there is never a seam between the two. */
+  margin-top: -1px;
+  pointer-events: none;
+}
+
+.wave svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.wave-flip {
+  transform: rotate(180deg);
+  margin-top: 0;
+  margin-bottom: -1px;
+}
+
+/* The absolutely-positioned wave takes no layout space, so the band has to
+   reserve it — without this the curve is drawn straight over the last line of
+   hero copy. Matches the wave's own height. */
+.hero .hero-grid {
+  padding-bottom: 118px;
+}
+
+@media (max-width: 640px) {
+  .hero .hero-grid {
+    padding-bottom: 64px;
+  }
+}
+
+/* A wave at the BOTTOM of a coloured band has to escape that band's own
+   padding, or it floats in the middle of the colour with a strip of the band
+   still below it. */
+.hero .wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.hero {
+  position: relative;
+}
+
+/* The flipped wave sits at the TOP of the closing band. It is absolutely
+   positioned, so it needs top padding to clear it (otherwise it draws over the
+   "Get Started" button) and an explicit stacking order (a positioned element
+   paints above in-flow content regardless of DOM order). */
+.close-cta {
+  position: relative;
+  padding-top: 96px;
+}
+
+.wave-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+}
+
+.close-cta > .close-cta-grid {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .close-cta {
+    padding-top: 60px;
+  }
+}
+
+/* =========================================================================
+   REFERENCE-SITE LAYOUT
+   =========================================================================
+   Sections copying the structure of the reference site the owner sent: product
+   shot in the gradient hero, tabbed showcase, eight-card grid, price band,
+   centred headings.
+
+   Appended deliberately — several rules restate selectors defined earlier
+   (.hero-fig, .section-head) and win on source order at equal specificity,
+   which leaves the earlier layout intact if a section is ever reverted.
+   ========================================================================= */
+
+/* ---- Pill CTA -----------------------------------------------------------
+   The one place the reference's rounded style is adopted wholesale: its calls
+   to action are fully rounded, and after the wave it is the most recognisable
+   thing about that page. */
+.btn-pill {
+  border-radius: 9999px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+/* ---- Hero: a real screenshot, not a drawing ---------------------------- */
+
+.hero-fig {
+  margin: 0;
+  padding: 8px 0 46px;
+  align-self: center;
+}
+
+.hero-fig img {
+  height: auto;
+  border-radius: 12px;
+  /* Bleeds off the right edge exactly as the reference does. It buys back
+     ~90px of width, which is what keeps the app's own type legible instead of
+     turning it into a grey smear. */
+  max-width: none;
+  width: calc(100% + 90px);
+  box-shadow: 0 24px 60px rgba(4, 30, 20, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+/* ---- Centred section headings ------------------------------------------
+   The reference centres every section heading. Both alignments are on the
+   page now: the feature grid and the showcase read as lopsided under a
+   left-aligned head, while the comparison table still wants the original. */
+.section-head.is-centred {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 44px;
+}
+
+.section-head.is-centred .label {
+  justify-content: center;
+}
+
+.section-head.is-centred h2 {
+  font-size: clamp(29px, 3.4vw, 40px);
+  font-weight: 700;
+}
+
+.section-sub {
+  margin-top: 14px;
+  font-size: 17px;
+  color: var(--text-secondary);
+  max-width: 54ch;
+}
+
+.section-head.is-centred .section-sub {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- "What is Plusveda" ------------------------------------------------- */
+
+.what-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 60px;
+  align-items: center;
+}
+
+/* Holds a screenshot, not a photograph, so it keeps its own aspect ratio —
+   cropping an application screen to a fixed height slices the sidebar off at
+   an arbitrary row. */
+.what-fig {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  box-shadow: 0 18px 44px rgba(11, 42, 30, 0.12);
+}
+
+.what-fig img {
+  width: 100%;
+  height: auto;
+}
+
+.what-copy h2 {
+  font-size: clamp(28px, 3.2vw, 40px);
+  font-weight: 700;
+  margin-top: 16px;
+}
+
+.what-copy > p {
+  margin-top: 18px;
+  font-size: 16.5px;
+  color: var(--text-secondary);
+  max-width: 46ch;
+}
+
+.what-copy .hero-cta {
+  margin-top: 28px;
+}
+
+/* ---- Tabbed showcase ----------------------------------------------------
+   Pill tabs over a large product still, in place of the reference's video. */
+
+.showcase-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+
+.showcase-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  padding: 11px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--rule);
+  background: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  text-align: left;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.showcase-tab:hover {
+  border-color: var(--brand-300);
+}
+
+.showcase-tab.is-on {
+  background: var(--brand-700);
+  border-color: var(--brand-700);
+  color: #fff;
+}
+
+/* Focus has to survive the selected state — the tabs are reachable by arrow
+   key, and the ring is the only thing telling a keyboard user where they are. */
+.showcase-tab:focus-visible {
+  outline: 2px solid var(--brand-600);
+  outline-offset: 2px;
+}
+
+.showcase-tab.is-on:focus-visible {
+  outline-color: #fff;
+}
+
+.showcase-tag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.showcase-tab.is-on .showcase-tag {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.showcase-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.showcase-frame {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(11, 42, 30, 0.12);
+}
+
+.showcase-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.showcase-frame figcaption {
+  padding: 16px 22px;
+  border-top: 1px solid var(--rule);
+  font-size: 15px;
+  color: var(--text-secondary);
+  background: var(--surface);
+}
+
+/* ---- Eight-card feature grid ------------------------------------------- */
+
+.feat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 26px 24px;
+}
+
+.feat {
+  display: flex;
+  flex-direction: column;
+}
+
+.feat-fig {
+  margin: 0 0 16px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  background: var(--ink-50);
+  aspect-ratio: 16 / 10;
+}
+
+.feat-fig img {
+  width: 100%;
+  height: 100%;
+  /* `cover`, anchored top-left: these are crops of the running app, and a
+     screen's identity is in its heading and first rows. A centred crop would
+     frame the empty middle of a table. */
+  object-fit: cover;
+  object-position: left top;
+}
+
+/* The phone shot is portrait — cropping it to 16:10 would leave a slice of
+   status bar. It sits inside the frame instead. */
+.feat-fig.is-contain {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(140deg, var(--brand-50), var(--ink-50));
+}
+
+.feat-fig.is-contain img {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
+}
+
+.feat h3 {
+  font-size: 17.5px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+}
+
+.feat p {
+  margin-top: 8px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* ---- Price cards --------------------------------------------------------
+   Four terms of one product, sold the way a hosting company sells one: the
+   per-month figure is the headline, the total is the fine print.
+
+   Built in this page's language, not the reference's — hairline rules, 3px
+   corners, tabular mono. The four cards read as one ruled table across;
+   only the featured card leaves the grid, because a price list needs exactly
+   one default. */
+
+.plans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  align-items: stretch;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  /* The featured card lifts out of the row; without this its ribbon and
+     shadow are clipped by the shared frame. */
+  overflow: visible;
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 24px 26px;
+  border-left: 1px solid var(--rule);
+  position: relative;
+  background: var(--surface);
+}
+
+.plan:first-child {
+  border-left: 0;
+}
+
+/* The default. Raised, outlined in the brand green, and the only card whose
+   button is filled — a visitor who does not want to think should be able to
+   take this one without reading the other three. */
+.plan.is-featured {
+  border: 1px solid var(--brand-600);
+  border-radius: var(--radius-lg);
+  margin: -14px 0;
+  padding-top: 40px;
+  padding-bottom: 36px;
+  box-shadow: 0 18px 40px rgba(7, 60, 33, 0.1);
+  z-index: 1;
+}
+
+.plan-ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 0;
+  background: var(--brand-600);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.plan-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 24px;
+}
+
+.plan-head h3 {
+  font-family: var(--font-head);
+  font-size: 16.5px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* The discount, stated in per cent. Measured against our own 1-month plan,
+   which is sold three cards to the right — the one anchor on a pricing page
+   that cannot be accused of being invented. */
+.plan-save {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-800);
+  background: var(--brand-100);
+  border: 1px solid var(--brand-300);
+  border-radius: 999px;
+  padding: 4px 9px;
+  white-space: nowrap;
+}
+
+.plan-blurb {
+  margin-top: 8px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+  min-height: 40px;
+}
+
+/* The one big number on the card. Tabular mono, because it is a rate — the
+   same face the app itself sets a rate in. */
+.plan-rate {
+  margin-top: 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.plan-cur {
+  font-size: 20px;
+  font-weight: 500;
+  align-self: flex-start;
+  margin-top: 6px;
+}
+
+.plan-num {
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.plan-per {
+  margin-left: 4px;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+/* The ruled breakdown that sat here — "You pay ... once", the struck-through
+   anchor, the rupees saved — is gone from the PUBLIC card by request: it leads
+   with one number now, and the arithmetic appears on the pricing page a visitor
+   reaches after registering. The app renders it there from the same figures.
+
+   `margin-top: auto` is what holds the row together without it: the buttons sit
+   on one line across four cards whose taglines wrap to different heights. */
+.plan-cta {
+  margin-top: auto;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  width: 100%;
+  font-size: 14.5px;
+}
+
+/* Air between the rate and the button on the shortest card, where `auto` has
+   nothing left to distribute. */
+.plan-rate + .plan-cta {
+  margin-top: 22px;
+}
+
+/* Phones only — see the swipe row at the bottom of this file. On a desktop
+   all four cards are visible at once and an instruction to swipe would be
+   nonsense, so it is not merely hidden, it is only ever shown there. */
+.plans-swipe {
+  display: none;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.plans-note {
+  margin: 20px auto 0;
+  max-width: 74ch;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.plans-note a {
+  color: var(--brand-700);
+  font-weight: 600;
+}
+
+/* ---- What every plan carries -------------------------------------------
+   Once, under the grid — not four identical tick-lists down four columns.
+   There is one tier, so repeating the list would only tell a reader to go
+   looking for a difference that is not there. */
+
+.includes {
+  margin-top: 44px;
+  padding-top: 26px;
+  border-top: 1px solid var(--rule);
+}
+
+.includes ul {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 40px;
+}
+
+.includes li {
+  position: relative;
+  padding: 10px 0 10px 26px;
+  border-top: 1px solid var(--rule);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* A bare mono tick, not a green circle — the circle-and-tick badge beside
+   every bullet is the exact template tell this page was rebuilt to lose. */
+.includes li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--brand-600);
+}
+
+/* The first item in each column already sits under the section's own rule. */
+.includes li:nth-child(-n + 3) {
+  border-top: 0;
+}
+
+/* ---- Responsive --------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+  .feat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Two up. Four 270px columns are readable on a laptop; four 180px ones put
+     "12 Month Plan" on three lines and the ₹ figure on two. */
+  .plans {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .plan:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .plan:nth-child(n + 3) {
+    border-top: 1px solid var(--rule);
+  }
+
+  /* The lift only works while the card has neighbours either side of it.
+     In a 2×2 it just knocks the first row out of alignment. */
+  .plan.is-featured {
+    margin: 0;
+    padding-top: 40px;
+  }
+
+  .includes ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 32px;
+  }
+
+  .includes li:nth-child(-n + 3) {
+    border-top: 1px solid var(--rule);
+  }
+
+  .includes li:nth-child(-n + 2) {
+    border-top: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .what-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  /* The hero screenshot stops bleeding off the edge on a phone: at 390px a
+     90px overhang is a quarter of the viewport, and the app inside is
+     unreadable at any width there anyway — it earns its place by being a
+     picture of real software, not by being readable. */
+  .hero-fig img {
+    width: 100%;
+    box-shadow: 0 14px 30px rgba(4, 30, 20, 0.28);
+  }
+
+  .plans-note {
+    text-align: left;
+  }
+
+  .showcase-tabs {
+    /* Scrolls sideways rather than wrapping into three ragged rows. */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+
+  .showcase-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .showcase-tab {
+    flex: none;
+  }
+
+  .showcase-frame figcaption {
+    padding: 13px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 620px) {
+  .feat-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+}
+
+/* ---- Price cards on a phone ---------------------------------------------
+   PLACEMENT: this block must sit AFTER the 1000px one above. Both match at
+   390px and both set `.plans` grid-template-columns at equal specificity, so
+   the later one wins — filed with the other 640px rules it silently left a
+   phone on the desktop's two-column table.
+
+   A swipe row, not four stacked cards: stacked they are 1,300px of scrolling.
+   The recommended plan is first, so a visitor who never swipes still sees it. */
+
+@media (max-width: 640px) {
+  .plans {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    /* The shared frame is what makes four cards read as one table. It cannot
+       survive a scroller — the border would scroll away with the content —
+       so on a phone each card carries its own. */
+    border: 0;
+    gap: 12px;
+    /* Room for the featured card's shadow, which is otherwise clipped by the
+       scroll container. */
+    padding: 4px 0 10px;
+    scrollbar-width: none;
+    /* The row runs edge to edge: a card should be able to sit under the
+       screen's edge as you swipe, rather than inside a 20px gutter. */
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    scroll-padding-left: 20px;
+  }
+
+  .plans::-webkit-scrollbar {
+    display: none;
+  }
+
+  .plan {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    padding: 22px 18px 20px;
+  }
+
+  .plan.is-featured {
+    margin: 0;
+    padding-top: 34px;
+  }
+
+  /* The blurb reserves height so four side-by-side cards line up. In a
+     scroller they are all the same height anyway — the flex row stretches
+     them — so this is just 40px of nothing on every card. */
+  .plan-blurb {
+    min-height: 0;
+    margin-top: 6px;
+  }
+
+  .plan-rate {
+    margin-top: 12px;
+  }
+
+  .plan-num {
+    font-size: 34px;
+  }
+
+  .plan-rate + .plan-cta {
+    margin-top: 16px;
+  }
+
+  .plans-swipe {
+    display: block;
+  }
+
+  .plans-note {
+    text-align: left;
+    margin-top: 4px;
+  }
+
+  .includes {
+    margin-top: 30px;
+  }
+
+  .includes ul {
+    grid-template-columns: 1fr;
+    margin-top: 14px;
+  }
+
+  /* Twelve one-line items in a single column is the longest list on the page.
+     Two columns is not the answer — at 175px these wrap to three lines each
+     and get taller, not shorter — so the saving comes out of the padding. */
+  .includes li {
+    border-top: 1px solid var(--rule);
+    padding: 8px 0 8px 24px;
+    font-size: 13.5px;
+  }
+
+  .includes li::before {
+    top: 8px;
+  }
+
+  .includes li:first-child {
+    border-top: 0;
+  }
+}
+
+/* =========================================================================
+   HOVER AND MOTION
+   =========================================================================
+   Taken from the reference site's own vocabulary (a Tailwind build, so its
+   classes are legible): cards lift 2 and deepen their shadow, the border takes
+   the brand colour, the card TITLE turns brand on group hover, and the image
+   inside scales slightly — all on a 300ms transition.
+
+   The group-hover pair is what makes a card feel like one object. Everything
+   here is transform / opacity / colour so it composites off the main thread.
+   ========================================================================= */
+
+/* ---- Hero badge ---------------------------------------------------------
+   The reference's rounded pill above the headline, dot and all. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 16px 7px 13px;
+  border-radius: 9999px;
+  font-size: 13.5px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(4px);
+}
+
+.badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #7ff0bd;
+  flex: none;
+}
+
+/* ---- The arrow on the primary CTA -------------------------------------- */
+
+.btn-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+  will-change: transform;
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* ---- Buttons ------------------------------------------------------------
+   A shadow and a small lift. Deliberately NOT scale(): the reference scales
+   its buttons, but scaling text renders it at a fractional size for the
+   duration of the transition and it visibly softens. Translating does not. */
+.btn {
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(16, 160, 88, 0.28);
+}
+
+.btn-ghost:hover {
+  transform: translateY(-2px);
+}
+
+.hero .btn-primary:hover {
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
+}
+
+.btn:active {
+  transform: translateY(0);
+  transition-duration: 0.05s;
+}
+
+/* ---- Feature cards ------------------------------------------------------
+   The signature move: the whole card lifts, its frame takes the brand colour,
+   the photograph inside grows a little, and the title turns green. Four
+   properties, one gesture. */
+
+.feat {
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
+}
+
+.feat-fig {
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.feat-fig img {
+  transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+}
+
+.feat h3 {
+  transition: color 0.3s ease;
+}
+
+.feat:hover {
+  transform: translateY(-8px);
+}
+
+.feat:hover .feat-fig {
+  border-color: var(--brand-300);
+  box-shadow: 0 14px 30px rgba(11, 42, 30, 0.16);
+}
+
+.feat:hover .feat-fig img {
+  transform: scale(1.06);
+}
+
+.feat:hover h3 {
+  color: var(--brand-700);
+}
+
+/* Keyboard users get the same feedback. The card is not focusable itself, so
+   this fires when anything inside it takes focus. */
+.feat:focus-within {
+  transform: translateY(-8px);
+}
+
+.feat:focus-within .feat-fig {
+  border-color: var(--brand-300);
+}
+
+/* ---- Showcase tabs and frame ------------------------------------------- */
+
+.showcase-tab {
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.showcase-tab:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(11, 42, 30, 0.1);
+}
+
+.showcase-frame {
+  transition: box-shadow 0.3s ease;
+}
+
+.showcase-frame:hover {
+  box-shadow: 0 24px 56px rgba(11, 42, 30, 0.18);
+}
+
+/* ---- The "what is it" screenshot and the hero shot --------------------- */
+
+.what-fig,
+.hero-fig img {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1),
+    box-shadow 0.4s ease;
+}
+
+.what-fig:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 56px rgba(11, 42, 30, 0.18);
+}
+
+/* ---- Ledger cells and comparison rows ----------------------------------
+   Quieter: these are read, not clicked, so they get a background tint and
+   nothing that moves. */
+
+.ledger-cell,
+.compare-row {
+  transition: background 0.25s ease;
+}
+
+.ledger-cell:hover,
+.compare-row:hover {
+  background: var(--brand-50);
+}
+
+/* ---- FAQ ---------------------------------------------------------------- */
+
+.faq summary {
+  transition: color 0.2s ease;
+}
+
+.faq summary:hover {
+  color: var(--brand-700);
+}
+
+/* ---- Footer and nav links ----------------------------------------------- */
+
+.footer-col a {
+  transition: color 0.2s ease;
+}
+
+/* =========================================================================
+   SCROLL REVEAL
+   =========================================================================
+   The reference's Framer Motion entrance, in CSS, driven by the
+   IntersectionObserver in useReveal.ts.
+
+   Two deliberate differences: the travel is 18px rather than 40 (long
+   entrances read as slow on the second pass), and cards in a grid are
+   STAGGERED 60ms apart so the grid reads as assembling. The delay is capped so
+   nothing at the end of a long grid is left waiting.
+   ========================================================================= */
+
+.reveal-armed {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* The stagger. Set as a custom property by useReveal so the delay survives
+   the class swap, and applied only on the way in — the armed state must not
+   be delayed or the element flashes at full opacity first. */
+.reveal-in {
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/*
+ * MOTION OFF.
+ *
+ * useReveal already bails out under prefers-reduced-motion; this covers the
+ * hover transforms, which it does not touch. Colour and shadow feedback
+ * survives, so the page still responds — it just stops moving.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .feat:hover,
+  .feat:focus-within,
+  .btn:hover,
+  .showcase-tab:hover,
+  .what-fig:hover {
+    transform: none;
+  }
+
+  .feat:hover .feat-fig img {
+    transform: none;
+  }
+
+  .btn:hover .btn-arrow {
+    transform: none;
+  }
+
+  .reveal-in {
+    transition: none;
+  }
+}

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      Every tag below is static on purpose. This is a React SPA, so anything
+      rendered by JS is invisible to the crawlers and preview-scrapers that
+      don't run it — WhatsApp's link preview above all, which is how a chemist
+      will actually receive this page.
+    -->
+    <title>
+      Plusveda — photograph the distributor's bill, skip the typing | Pharmacy
+      billing &amp; stock software
+    </title>
+    <!-- The price belongs in here. A chemist comparing four tabs of pharmacy
+         software reads the snippet before he reads the page, and "from ₹299 a
+         month" is the only line in it that separates us at a glance. Keep the
+         figure in step with src/config.ts. -->
+    <meta
+      name="description"
+      content="Photograph your distributor's invoice and Plusveda reads every line — batch, expiry, MRP, rate and GST. Plus GST billing, batch-wise stock and a reorder list that writes itself. Free to try, then from ₹299 a month."
+    />
+    <!--
+      %SITE_ORIGIN% is substituted at build time from the single constant in
+      vite.config.ts. Do not hardcode a domain into this file: it appears four
+      times below, and the last time they were written out by hand they went
+      out of step with a domain that may not even be owned.
+    -->
+    <link rel="canonical" href="%SITE_ORIGIN%/" />
+    <meta name="theme-color" content="#10A058" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Plusveda" />
+    <!-- Kept in step with the <h1>. A share card promising a headline the
+         page no longer carries is a small bait-and-switch, and this is how a
+         chemist actually receives the link. -->
+    <meta
+      property="og:title"
+      content="GST billing & inventory software for Indian pharmacies"
+    />
+    <meta
+      property="og:description"
+      content="Plusveda reads your distributor's invoice — every line, with batch, expiry, MRP and GST. Billing, stock and expiry for Indian medical stores. From ₹299 a month."
+    />
+    <!--
+      Absolute, and not negotiable. Scrapers fetch these from their own servers
+      with no page context, so a relative "/og.png" resolves against nothing:
+      WhatsApp still draws the card, with a grey hole where the picture goes.
+      og:url was missing entirely, which leaves the scraper to guess the
+      canonical address of what it just fetched.
+
+      public/og.png is generated — `npm run og` — from the same screenshot and
+      the same og:title as the page. Re-run it if either changes.
+    -->
+    <meta property="og:url" content="%SITE_ORIGIN%/" />
+    <meta property="og:image" content="%SITE_ORIGIN%/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Plusveda — GST billing and inventory software for Indian pharmacies, showing the dashboard"
+    />
+    <meta property="og:locale" content="en_IN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="%SITE_ORIGIN%/og.png" />
+
+    <link rel="icon" type="image/png" href="/icon.png" />
+
+    <!-- Outfit for headings, matching the reference site the owner asked this
+         page to follow; Inter for body text, matching the product itself. Plex
+         Mono carries the figures and labels. preconnect first so the font
+         request doesn't wait on a fresh DNS+TLS handshake. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- The hero is a real screenshot again, so it IS the LCP element and it
+         is worth a preload: without this it cannot even be discovered until
+         React has parsed, executed and rendered. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/shots/dashboard.png"
+      fetchpriority="high"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Plusveda",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Android, Windows, Web",
+        "description": "GST billing and batch-wise stock software for Indian medical stores and pharmacies.",
+        "url": "%SITE_ORIGIN%/",
+        "author": {
+          "@type": "Organization",
+          "name": "FiveM Infotech"
+        },
+        "offers": {
+          "@type": "AggregateOffer",
+          "priceCurrency": "INR",
+          "lowPrice": "799",
+          "highPrice": "3588",
+          "offerCount": 4,
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "12 Month Plan",
+              "priceCurrency": "INR",
+              "price": "3588",
+              "url": "%SITE_ORIGIN%/#price",
+              "availability": "https://schema.org/InStock",
+              "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "priceCurrency": "INR",
+                "price": "3588",
+                "billingDuration": 12,
+                "unitCode": "MON"
+              }
+            },
+            {
+              "@type": "Offer",
+              "name": "6 Month Plan",
+              "priceCurrency": "INR",
+              "price": "2394",
+              "url": "%SITE_ORIGIN%/#price",
+              "availability": "https://schema.org/InStock",
+              "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "priceCurrency": "INR",
+                "price": "2394",
+                "billingDuration": 6,
+                "unitCode": "MON"
+              }
+            },
+            {
+              "@type": "Offer",
+              "name": "3 Month Plan",
+              "priceCurrency": "INR",
+              "price": "1497",
+              "url": "%SITE_ORIGIN%/#price",
+              "availability": "https://schema.org/InStock",
+              "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "priceCurrency": "INR",
+                "price": "1497",
+                "billingDuration": 3,
+                "unitCode": "MON"
+              }
+            },
+            {
+              "@type": "Offer",
+              "name": "1 Month Plan",
+              "priceCurrency": "INR",
+              "price": "799",
+              "url": "%SITE_ORIGIN%/#price",
+              "availability": "https://schema.org/InStock",
+              "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "priceCurrency": "INR",
+                "price": "799",
+                "billingDuration": 1,
+                "unitCode": "MON"
+              }
+            }
+          ]
+        }
+      }
+    </script>
+
+    <!--
+      The four prices above are duplicated from src/config.ts, and there is no
+      way around it: this file is deliberately static so that crawlers and
+      WhatsApp's scraper — neither of which runs the React bundle — can read
+      the price. CHANGE ONE, CHANGE BOTH. tools/verifyLanding.mjs fails the
+      build if they drift.
+    -->
+
+    <!-- The pricing FAQ, so the questions a chemist asks before paying can
+         answer themselves in the search result. Kept in step with FAQS in
+         src/App.tsx. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does Plusveda cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "From ₹299 a month on the 12-month plan (₹3,588 paid once), down from ₹799 a month if you buy a month at a time. Every plan is the same software — nothing is charged per bill, per user or per medicine."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens when my plan runs out?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We tell you before it does, and you decide. No card is stored, so nothing can renew or charge itself. Reports and registers export to Excel and PDF whenever you want them."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I have to type in all my medicines first?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Over two lakh medicines ship with it — brand, salt, manufacturer and pack. You search for what you stock and add it."
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
