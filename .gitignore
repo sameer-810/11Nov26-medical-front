@@ -44,3 +44,6 @@ tools/qaProbe.mjs
 tools/*-shots/
 tools/*-state.json
 tools/*-auth.json
+
+# Vercel output when the project root is the landing folder (11Nov26-medical-web/vercel.json)
+11Nov26-medical-web/app-dist/
