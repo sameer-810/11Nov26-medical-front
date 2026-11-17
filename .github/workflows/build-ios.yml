@@ -11,7 +11,7 @@ name: Build iOS (.ipa)
 # standard macOS runners are free.
 #
 # PREREQUISITE (one time, cannot be done from CI): logged in to Expo as the
-# project owner (`akbarsacademy98`), run
+# project owner (`bombaymedics-team`, or with its EXPO_TOKEN set), run
 #   npx eas-cli build --platform ios --profile production
 # once and answer the Apple Developer login (the paid Bombay Medical Apple
 # account) + SMS 2FA prompts. That generates

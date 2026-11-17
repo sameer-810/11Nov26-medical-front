@@ -55,7 +55,7 @@ the app and has not been rebranded.
 
 ## App builds (EAS)
 
-The EAS project is `@akbarsacademy98/bombay-medical` (`owner` /
+The EAS project is `@bombaymedics-team/bombay-medical` (`owner` /
 `extra.eas.projectId` in `app.json`); building from another Expo account is
 refused with "Entity Not Authorized". The Android signing keystore is stored on
 EAS, not in this repo. App id on both stores: `com.bombaymedical.app`

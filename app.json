@@ -90,13 +90,13 @@
       "./plugins/withAndroidBuildTuning"
     ],
     "updates": {
-      "url": "https://u.expo.dev/00151171-4538-4e00-a031-32c89a95e14a"
+      "url": "https://u.expo.dev/06387678-6a6b-48e8-990f-7e1069ca53fa"
     },
     "extra": {
       "eas": {
-        "projectId": "00151171-4538-4e00-a031-32c89a95e14a"
+        "projectId": "06387678-6a6b-48e8-990f-7e1069ca53fa"
       }
     },
-    "owner": "akbarsacademy98"
+    "owner": "bombaymedics-team"
   }
 }

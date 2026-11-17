@@ -32,7 +32,7 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: |
           if [ -z "$EXPO_TOKEN" ]; then
-            echo "::error::Add an EXPO_TOKEN repository secret (Settings → Secrets and variables → Actions) from an Expo account with access to @akbarsacademy98/bombay-medical."
+            echo "::error::Add an EXPO_TOKEN repository secret (Settings → Secrets and variables → Actions) from an Expo account with access to @bombaymedics-team/bombay-medical (e.g. its robot token)."
             exit 1
           fi
 
